@@ -11,14 +11,14 @@
        <div class="contact-fome">
         
         <div class="input-class">
-         <form action="/" method="POST" enctype="multipart/form-data">
+         <form name="myForm" action="/" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()" >
             <input type="text" class="input" name="name" placeholder="Name" required>
             <input type="email" class="input" name="email" placeholder="E-MAIL" required>
             <input type="tel" class="input" name="number" placeholder="PHONE" required>
             <input type="text" class="input" name="address" placeholder="STREET ADDRESS">
            
-                <input type="file" name="adhar" accept="application/pdf">
-                <input type="file" name="pan" accept="application/pdf"> 
+                <input type="file" name="adhar" accept="application/pdf" required>
+                <input type="file" name="pan" accept="application/pdf" required> 
               
             
         </div>
@@ -26,7 +26,7 @@
             <input type="text" name="city" class="input" placeholder="CITY" required>
             <input type="tel"  name="pincode" class="input" placeholder="PINCODE" required>
             <input type="text" name="state" class="input" placeholder="STATE" required>
-            <input type="text" name="country" class="input" placeholder="COUNTRY">
+            <input type="text" name="country" class="input" placeholder="COUNTRY" required>
             
             <div class="btn">
                 <input type="submit"name="Submit" value="Submit"/>
@@ -36,5 +36,14 @@
          </form>
         </div>
     </div>
+    <script>
+    function validateForm() {
+      var x = document.forms["myForm"]["number"].value;
+      if (x.length!=10) {
+        alert("please write correct number");
+        return false;
+      }
+    }
+</script>
 </body>
 </html>

@@ -4,7 +4,9 @@ const app=express()
 const mysql =require('mysql2');
 const fileUpload = require('express-fileupload')
 const db=require('./db');
-const path = require('path')
+const path = require('path');
+const { connect } = require('http2');
+const { getMaxListeners } = require('process');
  
 
 const connection = mysql.createConnection({
@@ -21,7 +23,6 @@ const connection = mysql.createConnection({
         name varchar(20), 
         email varchar(40),
         number varchar(20),
-        contact varchar(20),
         address varchar(100) ,
         city varchar(20), 
         pincode varchar(10) ,
@@ -35,22 +36,26 @@ const connection = mysql.createConnection({
     else{
         console.log('table created')
     }
-    connection.close()
+
  })
  
-//   connection.query(
-//     `create table if not exists user_document(
-       
-//     ) 
-//     `
-//  , (err,results)=>{
-//     if(err)
-//         console.log(err)
-//     else{
-//         console.log('table created')
-//     }
-//     connection.close()
-//  })
+  connection.query(
+    `create table if not exists user_document(
+       d_id integer primary key auto_increment,
+        adhar varchar(255),
+        pan varchar(255),
+        user_id integer,
+        foreign key (user_id) references user(id)
+    ) 
+    `
+ , (err,results)=>{
+    if(err)
+        console.log(err)
+    else{
+        console.log('user document table created')
+    }
+   
+ })
  
 
 
@@ -60,10 +65,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload());
 
 app.get('/',(req,res)=>{
-       res.sendFile(__dirname+'/index.html')
+       res.render('index')
 })
 app.post('/',(req,res)=>{
     const {name,email,number,address,city,pincode,state,country}=req.body;
+    
      db.adduser(name,email,number,address,city,pincode,state,country)
     .then(()=>{
         res.redirect('/');
@@ -71,8 +77,64 @@ app.post('/',(req,res)=>{
     .catch((err)=>{
         res.send(err);
     })
+    console.log(email)
+    console.log(typeof(email))
     
+    
+    db.getid(email).then((id)=>{
+           var file1 = req.files.adhar;
+    var adhar_name=file1.name;
+    
+    var file2=req.files.pan;
+    var pan_name=file2.name
+    
+    // console.log(adhar_name )
+    // console.log(pan_name)
+    
+    uploadPath = __dirname + '/public/pdf/' + file1.name;
+    uploadPath2 = __dirname + '/public/pdf/' + file2.name;
+    
+    
+    file1.mv(uploadPath, function(err) {
+        if(err)
+            console.log(err)
+        else
+        db.addfile(adhar_name,pan_name,id);
+    
+    })
+    
+     file2.mv(uploadPath2, function(err) {
+    })
+    }
+    )
+    
+   
+    
+ 
 
+})
+
+app.get('/show',(req,res)=>{
+
+  
+   
+
+    
+     connection.query(
+    `select name,email,number,address,city,pincode,state,country,adhar,pan from user
+     inner join user_document
+     on user_id=user.id
+     ` ,
+     (err,rows)=>{
+     if(err)
+        console.log(err)
+      else{
+        
+         res.render("show", {rows:rows});
+      }
+     }
+  )
+   
 })
 
 app.listen(3000,()=>console.log('server started on port 3000'))

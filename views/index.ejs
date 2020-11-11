@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Responsive Contact Form</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        
+       <div class="contact-fome">
+        
+        <div class="input-class">
+         <form action="/" method="POST" enctype="multipart/form-data">
+            <input type="text" class="input" name="name" placeholder="Name" required>
+            <input type="email" class="input" name="email" placeholder="E-MAIL" required>
+            <input type="tel" class="input" name="number" placeholder="PHONE" required>
+            <input type="text" class="input" name="address" placeholder="STREET ADDRESS">
+           
+                <input type="file" name="adhar" accept="application/pdf">
+                <input type="file" name="pan" accept="application/pdf"> 
+              
+            
+        </div>
+        <div class="msg">
+            <input type="text" name="city" class="input" placeholder="CITY" required>
+            <input type="tel"  name="pincode" class="input" placeholder="PINCODE" required>
+            <input type="text" name="state" class="input" placeholder="STATE" required>
+            <input type="text" name="country" class="input" placeholder="COUNTRY">
+            
+            <div class="btn">
+                <input type="submit"name="Submit" value="Submit"/>
+                </div>
+                
+        </div>
+         </form>
+        </div>
+    </div>
+</body>
+</html>
